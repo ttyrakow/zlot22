@@ -1,9 +1,6 @@
 program testclib;
 {$APPTYPE CONSOLE}
 
-// math routines not required
-const __fltused: Integer = 0;
-
 function hello(): PAnsiChar; cdecl; 
 external 'c_lib.dll' name 'dyn_greet';
 
