@@ -8,8 +8,7 @@ const __fltused: Integer = 0;
 
 function hello(): PAnsiChar; cdecl; external name '_dyn_greet';
 
-//{$L 'c_obj.obj'}
-{$L 'c_obj.o'}
+{$L 'c_obj.obj'}
 
 begin
     var c: PAnsiChar := hello();

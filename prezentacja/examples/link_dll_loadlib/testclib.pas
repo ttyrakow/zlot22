@@ -12,7 +12,8 @@ var
     c_free: c_free_func;
 
 begin
-    var libHandle := LoadLibrary('c_lib.dll');
+    var libName := 'c_lib.dll';
+    var libHandle := LoadLibrary(PChar(libName));
     hello := hello_func(GetProcAddress(libHandle, 'dyn_greet'));
     c_free := c_free_func(GetProcAddress(libHandle, 'free_c_mem'));
 
