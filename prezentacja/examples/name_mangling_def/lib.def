@@ -1,0 +1,10 @@
+LIBRARY LIB
+EXPORTS
+cpp_sum_cdecl
+cpp_sum_stdcall
+cpp_sum_fastcall
+cpp_sum_vectorcall
+c_sum_cdecl
+c_sum_stdcall
+c_sum_fastcall
+c_sum_vectorcall

@@ -1,0 +1,6 @@
+Win64/
+lib/**
+!lib/readme.txt
+ffmpeg/
+LICENSE.txt
+stdout.txt
