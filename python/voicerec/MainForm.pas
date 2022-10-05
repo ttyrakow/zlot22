@@ -55,7 +55,7 @@ const
 
 {$REGION 'PYTHON_CODE'}
 {
-  We need to execute in Delphi an equivalent of the following Python code:
+  We need to execute in Delphi an equivalent of the following Python script:
 
   import numpy
   import pytorch
@@ -257,7 +257,7 @@ begin
     var transcription :=
       PyObject_Call(transcribe_method, transcribe_params, nil);
     Py_DecRef(transcribe_params);
-    // no Py_DecRef(sample_path) 'cause PyTuple_SetItem steals the reference
+    // no Py_DecRef(sample_path) - PyTuple_SetItem steals the reference
     if transcription = nil then
       transcribeLabel.Text := '<unsuccessful>'
     else
