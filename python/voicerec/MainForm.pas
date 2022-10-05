@@ -53,6 +53,21 @@ const
   WAV_FILE = 'recorded.wav';
   WHISPER_MODEL = 'small';
 
+{$REGION 'PYTHON_CODE'}
+{
+  We need to execute in Delphi an equivalent of the following Python code:
+
+  import numpy
+  import pytorch
+  import whisper
+  model = whisper.load_model("small")
+
+  transcription = model.transcribe("recorded.wav")
+  result = transcription["text"]
+
+}
+{$ENDREGION}
+
 procedure TFMainForm.FormCreate(Sender: TObject);
 begin
   transcribe_method := nil;
@@ -83,7 +98,7 @@ begin
     // Super important!
     // Importing numpy / pytorch crash miserably without these
     // FPU masks set - they definitely don't like FPU interrupts
-    // on errors, but rathe prefer getting NaN back
+    // on errors, but rather prefer getting NaN back
     Math.SetExceptionMask(
       [exInvalidOp, exDenormalized, exZeroDivide, exOverflow,
       exUnderflow, exPrecision]);
@@ -143,7 +158,6 @@ begin
     var load_model_params := PyTuple_New(1);
     var model_name := PyUnicode_FromString(WHISPER_MODEL);
     PyTuple_SetItem(load_model_params, 0, model_name);
-    Py_IncRef(model_name); // PyTuple_SetItem steals the reference
     var model := PyObject_Call(load_model, load_model_params, nil);
     if model = nil then
     begin
@@ -151,7 +165,7 @@ begin
         'Unable to load Whisper language model "' + WHISPER_MODEL + '".');
       Exit;
     end;
-    Py_DecRef(model_name);
+    // no Py_DecRef(model_name) 'cause PyTuple_SetItem steals the reference
     Py_DecRef(load_model_params);
     Py_DecRef(load_model);
 
@@ -239,12 +253,11 @@ begin
     var transcribe_params := PyTuple_New(1);
     var sample_path := PyUnicode_FromString(PAnsiChar(UTF8Encode(audio_path)));
     PyTuple_SetItem(transcribe_params, 0, sample_path);
-    Py_IncRef(sample_path); // PyTuple_SetItem steals the reference
 
     var transcription :=
       PyObject_Call(transcribe_method, transcribe_params, nil);
     Py_DecRef(transcribe_params);
-    Py_DecRef(sample_path);
+    // no Py_DecRef(sample_path) 'cause PyTuple_SetItem steals the reference
     if transcription = nil then
       transcribeLabel.Text := '<unsuccessful>'
     else
